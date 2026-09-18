@@ -69,6 +69,9 @@ alias docs='cd ~/Documents'
 alias dl='cd ~/Downloads'
 alias zconfig='vim ~/.zshrc'
 alias zreload='source ~/.zshrc'
+alias pacman-orphans='sudo pacman -Qtdq'
+alias pacman-remove-orphans='sudo pacman -Rns $(pacman -Qtdq)'
+alias pacman-mirror-update='sudo reflector --latest 20 --protocol https --sort rate --save /etc/pacman.d/mirrorlist'
 
 # Load Plugins
 source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
