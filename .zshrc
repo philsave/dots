@@ -38,7 +38,7 @@ precmd() { vcs_info }
 zstyle ':vcs_info:git:*' formats " %F{008}(%b)%f"
 
 setopt PROMPT_SUBST
-PS1="%B%F{blue}%n%f%b@%M %B%~%b\${vcs_info_msg_0_} %# "
+PS1="%B%F{blue}%n%f%b@%M %B%F{blue}%~%f%b\${vcs_info_msg_0_} %# "
 
 # Aliases:
 alias ls='ls --color=auto'
@@ -64,6 +64,7 @@ alias docs='cd ~/Documents'
 alias dl='cd ~/Downloads'
 alias zconfig='vim ~/.zshrc'
 alias zreload='source ~/.zshrc'
+alias neofetch='fastfetch --config neofetch.jsonc'
 
 alias pacman-orphans='sudo pacman -Qtdq'
 alias pacman-remove-orphans='sudo pacman -Rns $(pacman -Qtdq)'
@@ -144,8 +145,3 @@ if [[ "$TERM" == (Eterm*|alacritty*|aterm*|foot*|gnome*|konsole*|kterm*|putty*|r
     add-zsh-hook -Uz precmd xterm_title_precmd
     add-zsh-hook -Uz preexec xterm_title_preexec
 fi
-
-# Fish-like syntax highlighting and autosuggestions
-source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
-source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-
