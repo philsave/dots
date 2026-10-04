@@ -56,6 +56,4 @@ export LESS_TERMCAP_ue=$'\e[0m'
 export LESS_TERMCAP_us=$'\e[1;4;31m'
 
 . /usr/share/git/completion/git-prompt.sh
-GREEN="\[$(tput setaf 2)\]"
-RESET="\[$(tput sgr0)\]"
-PS1="${GREEN}[\u@\h \W$(__git_ps1 " (%s)")]${RESET}> "
+PS1='[\[\e[32;1m\]\u@\h\[\e[0m\] \[\e[35;1m\]\W\[\e[0m\]\[\e[33;1m\]$(__git_ps1 " (%s)")\[\e[0m\]]> '
