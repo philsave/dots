@@ -35,14 +35,17 @@ autoload -U colors && colors
 
 autoload -Uz vcs_info
 precmd() { vcs_info }
-zstyle ':vcs_info:git:*' formats " %F{008}(%b)%f"
+zstyle ':vcs_info:git:*' formats " %F{red}(%b)%f"
 
 setopt PROMPT_SUBST
-PS1="%B%F{blue}%n%f%b@%M %B%F{blue}%~%f%b\${vcs_info_msg_0_} %# "
+PROMPT="%B%F{green}%n@%M%f %F{blue}%~%f\${vcs_info_msg_0_}%b %# "
+RPROMPT="%F{008}%T%f"
 
 # Aliases:
 alias ls='ls --color=auto'
 alias grep='grep --color=auto'
+alias egrep='grep -E --color=auto'
+alias fgrep='grep -F --color=auto'
 
 alias ll='ls -alF'
 alias la='ls -A'
@@ -52,20 +55,28 @@ alias gs='git status'
 alias ga='git add'
 alias gc='git commit'
 alias gp='git push'
+alias gd='git diff'
 
-alias cp='cp -iv'
 alias mv='mv -iv'
-alias rm='rm -I'
+
 alias c='clear'
 alias h='history'
 alias v='vim'
-alias untar='tar -zxvf'
+alias tree='tree --dirsfirst -F'
+alias mkdir='mkdir -pv'
+alias cp='cp -iv'
+alias rm='rm -I'
+alias mv='mv -iv'
 alias docs='cd ~/Documents'
 alias dl='cd ~/Downloads'
+alias untar='tar -zxvf'
+alias py='python3'
 alias zconfig='vim ~/.zshrc'
 alias zreload='source ~/.zshrc'
 alias neofetch='fastfetch --config neofetch.jsonc'
+alias music-dl='yt-dlp -x -f bestaudio[ext=m4a] --add-metadata --embed-thumbnail' # Install atomicparsley
 
+alias pacman-clean-cache='paccache -r' # Install pacman-contrib
 alias pacman-orphans='sudo pacman -Qtdq'
 alias pacman-remove-orphans='sudo pacman -Rns $(pacman -Qtdq)'
 alias pacman-mirror-update='sudo reflector --latest 20 --protocol https --sort rate --save /etc/pacman.d/mirrorlist'
