@@ -4,6 +4,8 @@
 
 alias ls='ls --color=auto'
 alias grep='grep --color=auto'
+alias egrep='grep -E --color=auto'
+alias fgrep='grep -F --color=auto'
 
 alias ll='ls -alF'
 alias la='ls -A'
@@ -29,8 +31,12 @@ alias rm='rm -I'
 alias mv='mv -iv'
 alias docs='cd ~/Documents'
 alias dl='cd ~/Downloads'
+alias untar='tar -xvf'
+alias py='python3'
+alias neofetch='fastfetch --config neofetch.jsonc'
 alias music-dl='yt-dlp -x -f bestaudio[ext=m4a] --add-metadata --embed-thumbnail' # Install atomicparsley
 
+alias pacman-clean-cache='paccache -r' # Install pacman-contrib
 alias pacman-orphans='sudo pacman -Qtdq'
 alias pacman-remove-orphans='sudo pacman -Rns $(pacman -Qtdq)'
 alias pacman-mirror-update='sudo reflector --latest 20 --protocol https --sort rate --save /etc/pacman.d/mirrorlist'
