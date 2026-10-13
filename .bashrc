@@ -5,15 +5,18 @@
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
 
+export EDITOR=vim
+export VISUAL=vim
+
 # don't put duplicate lines or lines starting with space in the history.
-export HISTCONTROL=ignoreboth
+export HISTCONTROL=erasedups:ignoreboth
 
 # append to the history file, don't overwrite it
 shopt -s histappend
 
 HISTSIZE=1000
 HISTFILESIZE=2000
-HISTTIMEFORMAT="%F %T "
+HISTTIMEFORMAT="%F %T " # add timestamp
 
 # check the window size after each command and, if necessary,
 # update the values of LINES and COLUMNS.
@@ -84,7 +87,7 @@ function extract() {
   fi
 }
 
-# colorize Manpages
+# colorize manpages
 export LESS_TERMCAP_mb=$'\e[1;32m'
 export LESS_TERMCAP_md=$'\e[1;32m'
 export LESS_TERMCAP_me=$'\e[0m'
@@ -94,4 +97,4 @@ export LESS_TERMCAP_ue=$'\e[0m'
 export LESS_TERMCAP_us=$'\e[1;4;31m'
 
 . /usr/share/git/completion/git-prompt.sh
-PS1='[\[\e[32;1m\]\u@\h\[\e[0m\] \[\e[35;1m\]\W\[\e[0m\]\[\e[33;1m\]$(__git_ps1 " (%s)")\[\e[0m\]]> '
+PS1='[\[\e[32;1m\]\u@\h\[\e[0m\] \[\e[34;1m\]\W\[\e[0m\]\[\e[31;1m\]$(__git_ps1 " (%s)")\[\e[0m\]]\$ '
