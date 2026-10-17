@@ -210,6 +210,16 @@ default_border pixel
 # lock the screen using Super+X
 bindsym $mod+x exec --no-startup-id i3lock -c 000000
 
+# launch browser
+bindsym $mod+Shift+Return exec firefox
+
+# notifications
+exec dunst
+
+gaps inner 5
+gaps outer 0
+smart_borders on
+
 # Assign programs to certain workspaces
 assign [class="Firefox"] → number $ws2
 for_window [class="Spotify"] move container to workspace number $ws4 # can't use "assign" for Spotify
