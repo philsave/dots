@@ -6,11 +6,10 @@ set nocompatible
 
 " set line numbers
 set number
-set relativenumber
 
 filetype plugin indent on
 
-" use spaces instead of tabs
+" use space characters instead of tabs
 set expandtab
 
 set shiftwidth=4
@@ -20,8 +19,12 @@ set autoindent
 
 set belloff=all
 
+set ruler
+
 " Syntax highlighting
 syntax on
+
+set nowrap
 
 " Horizontal cursor line
 set cursorline
@@ -50,21 +53,26 @@ set incsearch
 colorscheme habamax
 set background=dark
 
+"
+" MAPPINGS
+"
+" Type jj to exit insert mode quickly.
+inoremap jj <Esc>
 
+"
 " STATUS LINE 
-
+"
 " Clear status line when vimrc is reloaded.
 set statusline=
 
 " Status line left side.
-set statusline+=\ %F\ %m\ %r\ %h\ %w\ Filetype:\ %y
+set statusline+=\ %F\ %m\ %r\ %h\ %w
 
 " Use a divider to separate the left side from the right side.
 set statusline+=%=
 
 " Status line right side.
-set statusline+=[%l,%v]\ [%p%%]
+set statusline+=%y\ [%p%%]\ [%l,%v]
 
 " Show the status on the second to last line.
 set laststatus=2
-
