@@ -200,6 +200,10 @@ bindsym Ctrl+Print exec maim | xclip -selection clipboard -t image/png
 bindsym Ctrl+$mod+Print exec maim --window $(xdotool getactivewindow) | xclip -selection clipboard -t image/png
 bindsym Ctrl+Shift+Print exec maim --select | xclip -selection clipboard -t image/png
 
+# when Caps Lock is pressed by itself, it acts as Escape. When Caps Lock is pressed with another key, it acts like the Super key.
+exec --no-startup-id xcape -e 'Super_L=Escape'
+exec --no-startup-id setxkbmap -option caps:super
+
 # eliminate title bars in split layouts
 default_border pixel
 
