@@ -188,10 +188,17 @@ bar {
 }
 
 # set background
-exec --no-startup-id feh --bg-scale ~/Pictures/Wallpapers/mountains.jpg
+exec --no-startup-id feh --bg-scale /home/$USER/Pictures/Wallpapers/artemis-ii.jpg
 
-# activate flameshot (select an area)
-bindsym Print exec --no-startup-id flameshot gui
+## Screenshots
+bindsym Print exec maim "/home/$USER/Pictures/Screenshots/$(date).jpg"
+bindsym $mod+Print exec maim --window $(xdotool getactivewindow) "/home/$USER/Pictures/Screenshots/$(date).jpg"
+bindsym Shift+Print exec maim --select "/home/$USER/Pictures/Screenshots/$(date).jpg"
+
+## Clipboard Screenshots
+bindsym Ctrl+Print exec maim | xclip -selection clipboard -t image/png
+bindsym Ctrl+$mod+Print exec maim --window $(xdotool getactivewindow) | xclip -selection clipboard -t image/png
+bindsym Ctrl+Shift+Print exec maim --select | xclip -selection clipboard -t image/png
 
 # eliminate title bars in split layouts
 default_border pixel
