@@ -19,8 +19,8 @@ _comp_options+=(globdots) # Include dotfiles
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}' # case-insensitive
 zstyle ':completion*' menu select
 
-# Set Emacs mode
-bindkey -e
+# Set evil mode
+bindkey -v
 
 unsetopt beep
 
@@ -38,8 +38,9 @@ precmd() { vcs_info }
 zstyle ':vcs_info:git:*' formats " %F{red}(%b)%f"
 
 setopt PROMPT_SUBST
-PROMPT="%B%F{green}%n@%M%f %F{blue}%~%f\${vcs_info_msg_0_}%b %# "
-RPROMPT="%F{008}%T%f"
+#PROMPT="[%B%F{green}%n@%M%f %F{blue}%1~%f\${vcs_info_msg_0_}%b]%# "
+PROMPT="%B%F{blue}%~%f\${vcs_info_msg_0_}%b %# "
+#RPROMPT="%F{008}%T%f"
 
 # Aliases:
 alias ls='ls --color=auto'
@@ -57,11 +58,10 @@ alias gc='git commit'
 alias gp='git push'
 alias gd='git diff'
 
-alias mv='mv -iv'
-
 alias c='clear'
 alias h='history'
-alias v='vim'
+alias vi='vim'
+alias nv='nvim'
 alias tree='tree --dirsfirst -F'
 alias mkdir='mkdir -pv'
 alias cp='cp -iv'
@@ -71,9 +71,6 @@ alias docs='cd ~/Documents'
 alias dl='cd ~/Downloads'
 alias untar='tar -zxvf'
 alias py='python3'
-alias zconfig='vim ~/.zshrc'
-alias zreload='source ~/.zshrc'
-alias neofetch='fastfetch --config neofetch.jsonc'
 alias music-dl='yt-dlp -x -f bestaudio[ext=m4a] --add-metadata --embed-thumbnail' # Install atomicparsley
 
 alias pacman-clean-cache='paccache -r' # Install pacman-contrib
