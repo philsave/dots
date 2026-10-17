@@ -39,7 +39,7 @@ zstyle ':vcs_info:git:*' formats " %F{red}(%b)%f"
 
 setopt PROMPT_SUBST
 #PROMPT="[%B%F{green}%n@%M%f %F{blue}%1~%f\${vcs_info_msg_0_}%b]%# "
-PROMPT="%B%F{blue}%~%f\${vcs_info_msg_0_}%b %# "
+PROMPT="%B%F{magenta}%~%f\${vcs_info_msg_0_} %F{yellow}λ%f%b "
 #RPROMPT="%F{008}%T%f"
 
 # Aliases:
