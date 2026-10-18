@@ -5,6 +5,12 @@
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
 
+export EDITOR="nvim"
+export VISUAL="nvim"
+export MANPAGER='nvim +Man!'
+export PATH="$HOME/bin:$PATH"
+export PATH="$HOME/.config/emacs/bin:$PATH"
+
 # Save history in cache directory
 HISTSIZE=1000
 SAVEHIST=1000
@@ -40,7 +46,7 @@ zstyle ':vcs_info:git:*' formats " %F{red}(%b)%f"
 setopt PROMPT_SUBST
 #PROMPT="[%B%F{green}%n@%M%f %F{blue}%1~%f\${vcs_info_msg_0_}%b]%# "
 PROMPT="%B%F{magenta}%~%f\${vcs_info_msg_0_} %F{yellow}λ%f%b "
-#RPROMPT="%F{008}%T%f"
+RPROMPT="%F{008}%T%f"
 
 # Aliases:
 alias ls='ls --color=auto'
