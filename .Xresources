@@ -2,10 +2,7 @@ URxvt.font:           xft:DejaVu Sans Mono:size=12:style=Regular
 URxvt.boldFont:       xft:DejaVu Sans Mono:size=12:style=Medium
 URxvt.italicFont:     xft:DejaVu Sans Mono:size=12:style=Italic
 URxvt.boldItalicFont: xft:DejaVu Sans Mono:size=12:style=Medium Italic
-
-! Disable Perl extension
-!URxvt.perl-ext:
-!URxvt.perl-ext-common:
+URxvt.letterSpace: -1
 
 ! Fix Copy/Paste keybindings
 URxvt.iso14755: false
