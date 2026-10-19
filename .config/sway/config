@@ -1,7 +1,7 @@
 ### Variables
 #
 # Logo key. Use Mod1 for Alt.
-set $mod Mod4
+set $mod Escape
 # Home row direction keys, like vim
 set $left h
 set $down j
@@ -15,7 +15,7 @@ set $menu rofi -modi drun,run -show drun
 ### Output configuration
 #
 # Default wallpaper (more resolutions are available in /usr/share/backgrounds/sway/)
-output * bg ~/Pictures/Wallpapers/mountains.jpg fill
+output * bg /home/$USER/Pictures/Wallpapers/artemis-ii.jpg fill
 #
 # Example configuration:
 #
@@ -42,10 +42,11 @@ input type:touchpad {
     natural_scroll enabled
     middle_emulation enabled
 }
-#
-#   input type:keyboard {
-#       xkb_layout "eu"
-#   }
+
+input type:keyboard {
+    #xkb_layout "eu"
+    xkb_options caps:escape
+}
 #
 # You can also configure each device individually.
 # Read `man 5 sway-input` for more information about this section.
@@ -68,7 +69,7 @@ input type:touchpad {
     # Despite the name, also works for non-floating windows.
     # Change normal to inverse to use left mouse button for resizing and right
     # mouse button for dragging.
-    floating_modifier $mod normal
+    floating_modifier Mod4
 
     # Reload the configuration file
     bindsym $mod+Shift+c reload
@@ -226,7 +227,13 @@ exec nm-applet
 # Lockscreen shortcut
 bindsym $mod+x exec swaylock -f -c 000000
 
+# launch browser
+bindsym $mod+Shift+Return exec firefox
+
 # eliminate title bars in split layouts
 default_border pixel
+
+# hides borders on workspaces with only one window visible
+hide_edge_borders smart
 
 include /etc/sway/config.d/*
