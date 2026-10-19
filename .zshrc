@@ -12,8 +12,8 @@ export PATH="$HOME/bin:$PATH"
 export PATH="$HOME/.config/emacs/bin:$PATH"
 
 # Save history in cache directory
-HISTSIZE=1000
-SAVEHIST=1000
+HISTSIZE=2000
+SAVEHIST=2000
 HISTFILE=~/.cache/zsh/history
 setopt HIST_IGNORE_ALL_DUPS
 setopt HIST_SAVE_NO_DUPS
@@ -37,6 +37,7 @@ setopt autocd
 setopt extendedglob
 
 # Appearance & prompt style:
+#
 autoload -U colors && colors
 
 autoload -Uz vcs_info
@@ -49,6 +50,7 @@ PROMPT="%B%F{magenta}%~%f\${vcs_info_msg_0_} %F{yellow}λ%f%b "
 RPROMPT="%F{008}%T%f"
 
 # Aliases:
+#
 alias ls='ls --color=auto'
 alias grep='grep --color=auto'
 alias egrep='grep -E --color=auto'
@@ -58,6 +60,7 @@ alias ll='ls -alF'
 alias la='ls -A'
 alias l='ls -CF'
 
+#alias gs='git status'
 alias gs='git status'
 alias ga='git add'
 alias gc='git commit'
@@ -83,6 +86,38 @@ alias pacman-clean-cache='paccache -r' # Install pacman-contrib
 alias pacman-orphans='sudo pacman -Qtdq'
 alias pacman-remove-orphans='sudo pacman -Rns $(pacman -Qtdq)'
 alias pacman-mirror-update='sudo reflector --latest 20 --protocol https --sort rate --save /etc/pacman.d/mirrorlist'
+
+# Shell functions:
+#
+function compress_pdf() {
+    ghostscript -sDEVICE=pdfwrite -dCompatibilityLevel=1.4 -dPDFSETTINGS=/prepress \
+    -dNOPAUSE -dQUIET -dBATCH -sOutputFile="${2:-compressed_$1}" "$1"
+}
+
+function find_largest_files() {
+    du -h -x -s -- * | sort -r -h | head -20;
+}
+
+function extract() {
+  if [ -f $1 ] ; then
+    case $1 in
+      *.tar.bz2)   tar xjf $1   ;;
+      *.tar.gz)    tar xzf $1   ;;
+      *.bz2)       bunzip2 $1   ;;
+      *.rar)       unrar x $1     ;;
+      *.gz)        gunzip $1    ;;
+      *.tar)       tar xf $1    ;;
+      *.tbz2)      tar xjf $1   ;;
+      *.tgz)       tar xzf $1   ;;
+      *.zip)       unzip $1     ;;
+      *.Z)         uncompress $1;;
+      *.7z)        7z x $1      ;;
+      *)           echo "'$1' cannot be extracted" ;;
+    esac
+  else
+    echo "'$1' is not a valid file"
+  fi
+}
 
 # Keybindings:
 # create a zkbd compatible hash;
@@ -159,3 +194,8 @@ if [[ "$TERM" == (Eterm*|alacritty*|aterm*|foot*|gnome*|konsole*|kterm*|putty*|r
     add-zsh-hook -Uz precmd xterm_title_precmd
     add-zsh-hook -Uz preexec xterm_title_preexec
 fi
+
+# Fish-like syntax highlighting and autosuggestions:
+# install zsh-syntax-highlighting, zsh-autosuggestions;
+source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
+source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
