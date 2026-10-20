@@ -111,11 +111,11 @@ bindsym $mod+a focus parent
 
 # Define names for default workspaces for which we configure key bindings later on.
 # We use variables to avoid repeating the names in multiple places.
-set $ws1 "1:>_"
-set $ws2 "2:WWW"
-set $ws3 "3:{}"
-set $ws4 "4:♪"
-set $ws5 "5:≡"
+set $ws1 "1"
+set $ws2 "2"
+set $ws3 "3"
+set $ws4 "4"
+set $ws5 "5"
 set $ws6 "6"
 set $ws7 "7"
 set $ws8 "8"
@@ -187,18 +187,17 @@ bar {
         tray_output primary
 }
 
-# set background
-exec --no-startup-id feh --bg-scale /home/$USER/Pictures/Wallpapers/artemis-ii.jpg
+# Screenshots via scrot
+bindsym --release Print exec scrot '%Y-%m-%d_%H-%M-%S.png' -e 'mv $f ~/Pictures/Screenshots/'
+bindsym --release Alt+Print exec scrot -u '%Y-%m-%d_%H-%M-%S.png' -e 'mv $f ~/Pictures/Screenshots/' # capture active window
+bindsym --release Shift+Print exec scrot -s '%Y-%m-%d_%H-%M-%S.png' -e 'mv $f ~/Pictures/Screenshots/' # select a region
 
-# use Flameshot for screenshots
-bindsym Print exec flameshot gui
+# set background via feh
+exec --no-startup-id feh --bg-scale /home/$USER/Pictures/Wallpapers/artemis-ii.jpg
 
 # when Caps Lock is pressed by itself, it acts as Escape. When Caps Lock is pressed with another key, it acts like the Super key.
 exec --no-startup-id xcape -e 'Super_L=Escape'
 exec --no-startup-id setxkbmap -option caps:super
-
-# eliminate title bars in split layouts
-default_border pixel
 
 # lock the screen using Super+X
 bindsym $mod+x exec --no-startup-id i3lock -c 000000
@@ -207,11 +206,20 @@ bindsym $mod+x exec --no-startup-id i3lock -c 000000
 bindsym $mod+Shift+Return exec firefox
 
 # notifications
-exec dunst
+exec --no-startup-id dunst
+
+# eliminate title bars in split layouts
+default_border pixel
+
+# hides borders on workspaces with only one window visible
+hide_edge_borders smart
 
 gaps inner 5
 gaps outer 0
 smart_borders on
+
+# multi-monitor script
+#exec --no-startup-id /home/$USER/.screenlayout/dual_monitors.sh
 
 # Assign programs to certain workspaces
 assign [class="Firefox"] → number $ws2
