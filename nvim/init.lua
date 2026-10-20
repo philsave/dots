@@ -8,7 +8,6 @@ vim.g.maplocalleader = " " -- space for localleader
 -- COLORS
 vim.o.termguicolors = true
 vim.o.background = "dark"
-vim.cmd.colorscheme("habamax")
 
 -- OPTIONS
 --
@@ -64,6 +63,7 @@ vim.o.sidescrolloff = 10 -- Keep 10 lines to left/right of cursor
 
 vim.o.signcolumn = "yes" -- always show a sign column
 vim.o.colorcolumn = "100" -- show a column at 100 position chars
+vim.opt.showmode = false -- do not show the mode, instead have it in statusline
 vim.o.conceallevel = 2 -- obsidian requirement
 vim.o.concealcursor = "" -- do not hide cursorline in markup
 vim.o.synmaxcol = 300 -- syntax highlighting limit
@@ -111,6 +111,11 @@ vim.keymap.set({ 'n' }, '<A-k>', '<C-w>k')
 vim.keymap.set({ 'n' }, '<A-l>', '<C-w>l')
 
 vim.keymap.set("n", "<leader>c", ":nohlsearch<CR>", { desc = "Clear search highlights" })
+
+vim.keymap.set("n", "n", "nzzzv", { desc = "Next search result (centered)" })
+vim.keymap.set("n", "N", "Nzzzv", { desc = "Previous search result (centered)" })
+vim.keymap.set("n", "<C-d>", "<C-d>zz", { desc = "Half page down (centered)" })
+vim.keymap.set("n", "<C-u>", "<C-u>zz", { desc = "Half page up (centered)" })
 
 vim.keymap.set("n", "<leader>w", "<cmd>write<cr>", { desc = "Save file" })
 vim.keymap.set("n", "<leader>q", "<cmd>quit<cr>", { desc = "Quit file" })
@@ -204,6 +209,14 @@ vim.pack.add({
   'https://github.com/nvim-treesitter/nvim-treesitter',
   -- A file explorer tree for neovim
   'https://github.com/nvim-tree/nvim-tree.lua',
+  -- Gruvbox colorscheme
+  'https://github.com/ellisonleao/gruvbox.nvim',
+  -- Provides Nerd Font icons (glyphs)
+  'https://github.com/nvim-tree/nvim-web-devicons',
+  -- A neovim statusline plugin
+  'https://github.com/nvim-lualine/lualine.nvim',
+  -- Show available keybindings in a popup as you type.
+  'https://github.com/folke/which-key.nvim',
 })
 
 require('fzf-lua').setup { fzf_colors = true }
@@ -211,3 +224,6 @@ require('mini.completion').setup {}
 require('quicker').setup {}
 require('gitsigns').setup {}
 require("nvim-tree").setup {}
+require("gruvbox").setup()
+vim.cmd.colorscheme("gruvbox")
+require('lualine').setup{ options = { theme = 'gruvbox' } }
