@@ -10,12 +10,16 @@ set $right l
 # Your preferred terminal emulator
 set $term foot
 # Your preferred application launcher
-set $menu rofi -modi drun,run -show drun
+set $menu wmenu-run
+# Your preferred file manager
+set $files thunar
+# Your preferred browser
+set $browser firefox
 
 ### Output configuration
 #
 # Default wallpaper (more resolutions are available in /usr/share/backgrounds/sway/)
-output * bg /home/$USER/Pictures/Wallpapers/artemis-ii.jpg fill
+output * bg /home/$USER/Pictures/wallpaper.jpg fill
 #
 # Example configuration:
 #
@@ -56,10 +60,10 @@ input type:keyboard {
 # Basics:
 #
     # Start a terminal
-    bindsym $mod+Return exec $term
+    bindsym $mod+t exec $term
 
     # Kill focused window
-    bindsym $mod+Shift+q kill
+    bindsym $mod+q kill
 
     # Start your launcher
     bindsym $mod+d exec $menu
@@ -133,7 +137,7 @@ input type:keyboard {
     # You can "split" the current object of your focus with
     # $mod+b or $mod+v, for horizontal and vertical splits
     # respectively.
-    bindsym $mod+b splith
+    bindsym $mod+Shift+v splith
     bindsym $mod+v splitv
 
     # Switch the current container between different layout styles
@@ -142,7 +146,7 @@ input type:keyboard {
     bindsym $mod+e layout toggle split
 
     # Make the current focus fullscreen
-    bindsym $mod+f fullscreen
+    bindsym $mod+m fullscreen
 
     # Toggle the current focus between tiling and floating mode
     bindsym $mod+Shift+space floating toggle
@@ -213,27 +217,61 @@ bindsym $mod+r mode "resize"
     bindsym ALt+Print exec grim - | wl-copy
     bindsym Control+Print exec grim -g "$(slurp)" - | wl-copy
 
+    # NetworkManager applet
+    exec nm-applet
+
+    # notifications
+    exec dunst
+
+    # Lockscreen shortcut
+    bindsym $mod+x exec swaylock -f -c 000000
+
+    # launch browser
+    bindsym $mod+b exec $browser
+
+    # launch file manager
+    bindsym $mod+f exec $files
+
 #
 # Status Bar:
 #
 # Read `man 5 sway-bar` for more information about this section.
 bar {
     status_command i3status
+    colors {
+         statusline #ffffff
+         separator #707880
+         focused_workspace #524f4C #454240 #ffffff
+    }
+    tray_output primary
 }
 
-# Start NetworkManager applet
-exec nm-applet
-
-# Lockscreen shortcut
-bindsym $mod+x exec swaylock -f -c 000000
-
-# launch browser
-bindsym $mod+Shift+Return exec firefox
-
+#
+# General appearance:
+#
 # eliminate title bars in split layouts
 default_border pixel
 
 # hides borders on workspaces with only one window visible
 hide_edge_borders smart
+
+gaps inner 5
+gaps outer 0
+smart_gaps on
+
+#
+# Colors:
+#
+# Dark Brown
+set $active #524f4C
+set $fg     #FFFFFF
+# Light Brown
+set $bg     #272727
+
+# Window Border color   border  backgr  text  indicator  child_boder
+client.focused          $active	$active $fg   $fg        $active
+client.focused_inactive $bg     $bg     $fg   $fg        $bg
+client.unfocused        $bg     $bg     $fg   $fg        $bg
+client.urgent           $bg     $bg     $fg   $fg        $bg
 
 include /etc/sway/config.d/*
