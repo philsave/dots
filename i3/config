@@ -3,10 +3,14 @@
 # Please see https://i3wm.org/docs/userguide.html for a complete reference!
 
 set $mod Mod4
+set $term alacritty
+set $browser firefox
+set $files thunar
 
 # Font for window titles. Will also be used by the bar unless a different font
 # is used in the bar {} block below.
-font pango:monospace 10
+#font pango:monospace 8
+font pango:Fira Mono 10
 
 # This font is widely installed, provides lots of unicode glyphs, right-to-left
 # text rendering and scalability on retina/hidpi displays (thanks to pango).
@@ -21,7 +25,7 @@ exec --no-startup-id dex --autostart --environment i3
 
 # xss-lock grabs a logind suspend inhibit lock and will use i3lock to lock the
 # screen before suspend. Use loginctl lock-session to lock your screen.
-exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock --nofork
+exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock --nofork -c 000000
 
 # NetworkManager is the most popular way to manage wireless networks on Linux,
 # and nm-applet is a desktop environment-independent system tray GUI for it.
@@ -46,15 +50,16 @@ floating_modifier $mod
 tiling_drag modifier titlebar
 
 # start a terminal
-bindsym $mod+Return exec i3-sensible-terminal 
+bindsym $mod+t exec $term 
 
 # kill focused window
-bindsym $mod+Shift+q kill
+bindsym $mod+q kill
 
 # start dmenu (a program launcher)
 #bindsym $mod+d exec --no-startup-id dmenu_run
+bindsym $mod+d exec --no-startup-id dmenu_run -nb "#272727" -nf "#ffffff" -sb "#524f4C" -sf "#ffffff"
 # A more modern dmenu replacement is rofi:
-bindcode $mod+40 exec "rofi -modi drun,run -show drun"
+# bindcode $mod+40 exec "rofi -modi drun,run -show drun"
 # There also is i3-dmenu-desktop which only displays applications shipping a
 # .desktop file. It is a wrapper around dmenu, so you need that installed.
 # bindcode $mod+40 exec --no-startup-id i3-dmenu-desktop
@@ -84,13 +89,13 @@ bindsym $mod+Shift+Up move up
 bindsym $mod+Shift+Right move right
 
 # split in horizontal orientation
-bindsym $mod+b split h
+bindsym $mod+Shift+v split h
 
 # split in vertical orientation
 bindsym $mod+v split v
 
 # enter fullscreen mode for the focused container
-bindsym $mod+f fullscreen toggle
+bindsym $mod+m fullscreen toggle
 
 # change container layout (stacked, tabbed, toggle split)
 bindsym $mod+s layout stacking
@@ -184,6 +189,11 @@ bindsym $mod+r mode "resize"
 # finds out, if available)
 bar {
         status_command i3status
+        colors {
+            statusline #ffffff
+            separator #707880
+            focused_workspace #524f4C #454240 #ffffff
+        }
         tray_output primary
 }
 
@@ -192,35 +202,54 @@ bindsym --release Print exec scrot '%Y-%m-%d_%H-%M-%S.png' -e 'mv $f ~/Pictures/
 bindsym --release Alt+Print exec scrot -u '%Y-%m-%d_%H-%M-%S.png' -e 'mv $f ~/Pictures/Screenshots/' # capture active window
 bindsym --release Shift+Print exec scrot -s '%Y-%m-%d_%H-%M-%S.png' -e 'mv $f ~/Pictures/Screenshots/' # select a region
 
-# set background via feh
-exec --no-startup-id feh --bg-scale /home/$USER/Pictures/Wallpapers/artemis-ii.jpg
-
 # when Caps Lock is pressed by itself, it acts as Escape. When Caps Lock is pressed with another key, it acts like the Super key.
-exec --no-startup-id xcape -e 'Super_L=Escape'
 exec --no-startup-id setxkbmap -option caps:super
+exec --no-startup-id xcape -e 'Super_L=Escape'
+
+# eliminate title bars in split layouts
+default_border pixel
 
 # lock the screen using Super+X
 bindsym $mod+x exec --no-startup-id i3lock -c 000000
 
 # launch browser
-bindsym $mod+Shift+Return exec firefox
+bindsym $mod+b exec $browser
 
-# notifications
-exec --no-startup-id dunst
-
-# eliminate title bars in split layouts
-default_border pixel
+# launch file manager
+bindsym $mod+f exec $files
 
 # hides borders on workspaces with only one window visible
 hide_edge_borders smart
 
+# notifications
+exec --no-startup-id dunst
+
 gaps inner 5
 gaps outer 0
-smart_borders on
+smart_gaps on
 
 # multi-monitor script
-#exec --no-startup-id /home/$USER/.screenlayout/dual_monitors.sh
+exec --no-startup-id /home/$USER/.screenlayout/dual_monitors.sh
+
+# set background
+exec --no-startup-id feh --bg-fill /home/$USER/Pictures/Wallpapers/.jpg
+
+# compositor for vsync, shadows etc.
+exec --no-startup-id picom -b
+
+# Colors
+# Dark Brown
+set $active #524f4C
+set $fg     #FFFFFF
+# Light Brown
+set $bg     #272727
+
+# Window Border color   border  backgr  text  indicator  child_boder
+client.focused          $active	$active $fg   $fg        $active
+client.focused_inactive $bg     $bg     $fg   $fg        $bg
+client.unfocused        $bg     $bg     $fg   $fg        $bg
+client.urgent           $bg     $bg     $fg   $fg        $bg
 
 # Assign programs to certain workspaces
-assign [class="Firefox"] → number $ws2
-for_window [class="Spotify"] move container to workspace number $ws4 # can't use "assign" for Spotify
+assign [class="firefox"] →  2
+for_window [class="Spotify"] move container to workspace 4
