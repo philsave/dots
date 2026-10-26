@@ -5,19 +5,32 @@
 " Disable compatibility with vi which can cause unexpected issues.
 set nocompatible
 
-" set line numbers
+" Show line numbers
 set number
 
+" Set built-in colorscheme
+colorscheme habamax
+set background=dark
+
+" Enable filetype plugins
 filetype plugin indent on
+
+" Turn backup off
+set nobackup
+set nowb
+set noswapfile
 
 " use space characters instead of tabs
 set expandtab
 
+" 1 tab == 4 spaces
 set shiftwidth=4
 set tabstop=4
+
 set smartindent
 set autoindent
 
+" Disable annoying sounds
 set belloff=all
 
 " Syntax highlighting
@@ -68,14 +81,6 @@ set showmatch
 
 " Set the commands to save in history default number is 20.
 set history=1000
-
-" Highlight a specific column for guidance.
-set colorcolumn=80
-
-
-" Set built-in colorscheme
-colorscheme unokai
-set background=dark
 
 " MAPPINGS --------------------------------------------------------------- {{{
 
