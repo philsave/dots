@@ -6,10 +6,10 @@
 set nocompatible
 
 " Show line numbers
-set number
+set number relativenumber
 
 " Set built-in colorscheme
-colorscheme habamax
+colorscheme retrobox
 set background=dark
 
 " Enable filetype plugins
@@ -20,6 +20,11 @@ set nobackup
 set nowb
 set noswapfile
 
+"sets default clipboard to the system clipboard
+set clipboard=unnamedplus
+
+set encoding=utf-8
+
 " use space characters instead of tabs
 set expandtab
 
@@ -29,7 +34,7 @@ set tabstop=4
 
 set smartindent
 set autoindent
-
+"
 " Disable annoying sounds
 set belloff=all
 
@@ -76,9 +81,6 @@ set showcmd
 " Show the mode you are on the last line.
 set showmode
 
-" Show matching words during a search.
-set showmatch
-
 " Set the commands to save in history default number is 20.
 set history=1000
 
@@ -117,6 +119,9 @@ noremap <c-down> <c-w>-
 noremap <c-left> <c-w>>
 noremap <c-right> <c-w><
 
+" Newtab
+nnoremap <silent> <C-t> :tabnew<CR>
+
 " }}}
 
 " VIMSCRIPT -------------------------------------------------------------- {{{
@@ -127,6 +132,12 @@ augroup filetype_vim
     autocmd!
     autocmd FileType vim setlocal foldmethod=marker
 augroup END
+
+" Return to last edit position when opening files (You want this!)
+autocmd BufReadPost *
+     \ if line("'\"") > 0 && line("'\"") <= line("$") |
+     \   exe "normal! g`\"" |
+     \ endif
 
 " }}}
 
