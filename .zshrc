@@ -5,11 +5,21 @@
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
 
-export EDITOR="nvim"
-export VISUAL="nvim"
-export MANPAGER='nvim +Man!'
-export PATH="$HOME/bin:$PATH"
-export PATH="$HOME/.config/emacs/bin:$PATH"
+# Add ~/bin and ~/.local/bin to PATH
+export PATH="$HOME/bin:$HOME/.local/bin:$PATH"
+
+# Use (Neo)vim as default editor and manpager
+if command -v nvim >/dev/null 2>&1; then
+    export EDITOR="nvim"
+    export VISUAL="$EDITOR"
+    export MANPAGER="nvim +Man!"
+    alias vim='nvim'
+    alias vi='nvim'
+elif command -v vim >/dev/null 2>&1; then
+    export EDITOR="vim"
+    export VISUAL="$EDITOR"
+    alias vi='vim'
+fi
 
 # Save history in cache directory
 HISTSIZE=2000
@@ -19,7 +29,7 @@ setopt HIST_IGNORE_ALL_DUPS
 setopt HIST_SAVE_NO_DUPS
 
 # Enable autocompletion
-autoload -Uz compinit 
+autoload -Uz compinit
 compinit -d ~/.cache/zsh/zcompdump-$ZSH_VERSION
 _comp_options+=(globdots) # Include dotfiles
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}' # case-insensitive
@@ -67,25 +77,24 @@ alias gc='git commit'
 alias gp='git push'
 alias gd='git diff'
 
-alias c='clear'
-alias h='history'
-alias vi='vim'
-alias nv='nvim'
 alias tree='tree --dirsfirst -F'
 alias mkdir='mkdir -pv'
 alias cp='cp -iv'
-alias rm='rm -I'
 alias mv='mv -iv'
-alias docs='cd ~/Documents'
-alias dl='cd ~/Downloads'
+alias rm='rm -I --preserve-root'
+
+alias c='clear'
+alias h='history'
 alias untar='tar -zxvf'
 alias py='python3'
+alias youtube-dl='yt-dlp'
 alias music-dl='yt-dlp -x -f bestaudio[ext=m4a] --add-metadata --embed-thumbnail' # Install atomicparsley
+alias neofetch='fastfetch --config neofetch.jsonc'
 
 alias pacman-clean-cache='paccache -r' # Install pacman-contrib
 alias pacman-orphans='sudo pacman -Qtdq'
 alias pacman-remove-orphans='sudo pacman -Rns $(pacman -Qtdq)'
-alias pacman-mirror-update='sudo reflector --latest 20 --protocol https --sort rate --save /etc/pacman.d/mirrorlist'
+alias pacman-mirror-update='sudo reflector --country Germany --latest 10 --protocol https --sort rate --save /etc/pacman.d/mirrorlist'
 
 # Shell functions:
 #
@@ -118,6 +127,31 @@ function extract() {
     echo "'$1' is not a valid file"
   fi
 }
+
+# cd and ls in one
+function cl() {
+	local dir="$1"
+	local dir="${dir:=$HOME}"
+	if [[ -d "$dir" ]]; then
+		cd "$dir" >/dev/null; ls
+	else
+		echo "bash: cl: $dir: Directory not found"
+	fi
+}
+
+# Create a directory and navigate to it
+mkcd() {
+    mkdir -p "$1" && cd "$1"
+}
+
+# Colorize manpages
+export LESS_TERMCAP_mb=$'\E[01;31m'
+export LESS_TERMCAP_md=$'\E[01;31m'
+export LESS_TERMCAP_me=$'\E[0m'
+export LESS_TERMCAP_se=$'\E[0m'
+export LESS_TERMCAP_so=$'\E[01;44;33m'
+export LESS_TERMCAP_ue=$'\E[0m'
+export LESS_TERMCAP_us=$'\E[01;32m'
 
 # Keybindings:
 # create a zkbd compatible hash;
