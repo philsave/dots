@@ -1,4 +1,3 @@
-
 -- Set <space> as the leader key
 -- See `:h mapleader`
 -- NOTE: Must happen before plugins are loaded (otherwise wrong leader will be used)
@@ -63,7 +62,11 @@ vim.o.sidescrolloff = 10 -- Keep 10 lines to left/right of cursor
 
 vim.o.signcolumn = "yes" -- always show a sign column
 vim.o.colorcolumn = "100" -- show a column at 100 position chars
-vim.opt.showmode = false -- do not show the mode, instead have it in statusline
+vim.o.showmatch = true -- highlights matching brackets
+vim.o.cmdheight = 1 -- single line command line
+vim.o.completeopt = "menuone,noinsert,noselect" -- completion options
+vim.o.showmode = false -- do not show the mode, instead have it in statusline
+vim.o.pumheight = 10 -- popup menu height
 vim.o.conceallevel = 2 -- obsidian requirement
 vim.o.concealcursor = "" -- do not hide cursorline in markup
 vim.o.synmaxcol = 300 -- syntax highlighting limit
@@ -86,12 +89,24 @@ vim.o.ttimeoutlen = 50 -- key code timeout
 vim.o.autoread = true -- auto-reload changes if outside of neovim
 vim.o.autowrite = false -- do not auto-save
 
+vim.o.hidden = true -- allow hidden buffers
 vim.o.errorbells = false -- no error sounds
 vim.o.backspace = "indent,eol,start" -- better backspace behaviour
+vim.o.selection = "inclusive" -- include last char in selection
 vim.o.mouse = "a" -- enable mouse support
+vim.o.modifiable = true -- allow buffer modifications
+vim.o.encoding = "UTF-8" -- set encoding
 
-vim.opt.wildmenu = true -- tab completion
-vim.opt.wildmode = "longest:full,full" -- complete longest common match, full completion list, cycle through with Tab
+vim.opt.guicursor =
+	"n-v-c:block,i-ci-ve:block,r-cr:hor20,o:hor50,a:blinkwait700-blinkoff400-blinkon250-Cursor/lCursor,sm:block-blinkwait175-blinkoff150-blinkon175" -- cursor blinking and settings
+
+-- Folding: requires treesitter available at runtime; safe fallback if not
+vim.opt.foldmethod = "expr" -- use expression for folding
+vim.opt.foldexpr = "v:lua.vim.treesitter.foldexpr()" -- use treesitter for folding
+vim.opt.foldlevel = 99 -- start with all folds open
+
+vim.o.wildmenu = true -- tab completion
+vim.o.wildmode = "longest:full,full" -- complete longest common match, full completion list, cycle through with Tab
 
 -- KEYMAPS
 --
@@ -100,34 +115,57 @@ vim.opt.wildmode = "longest:full,full" -- complete longest common match, full co
 -- Use <Esc> to exit terminal mode
 vim.keymap.set('t', '<Esc>', '<C-\\><C-n>')
 
--- Map <A-j>, <A-k>, <A-h>, <A-l> to navigate between windows in any modes
-vim.keymap.set({ 't', 'i' }, '<A-h>', '<C-\\><C-n><C-w>h')
-vim.keymap.set({ 't', 'i' }, '<A-j>', '<C-\\><C-n><C-w>j')
-vim.keymap.set({ 't', 'i' }, '<A-k>', '<C-\\><C-n><C-w>k')
-vim.keymap.set({ 't', 'i' }, '<A-l>', '<C-\\><C-n><C-w>l')
-vim.keymap.set({ 'n' }, '<A-h>', '<C-w>h')
-vim.keymap.set({ 'n' }, '<A-j>', '<C-w>j')
-vim.keymap.set({ 'n' }, '<A-k>', '<C-w>k')
-vim.keymap.set({ 'n' }, '<A-l>', '<C-w>l')
+-- Map <C-j>, <C-k>, <C-h>, <C-l> to navigate between windows in any modes
+vim.keymap.set({ 't', 'i' }, '<C-h>', '<C-\\><C-n><C-w>h')
+vim.keymap.set({ 't', 'i' }, '<C-j>', '<C-\\><C-n><C-w>j')
+vim.keymap.set({ 't', 'i' }, '<C-k>', '<C-\\><C-n><C-w>k')
+vim.keymap.set({ 't', 'i' }, '<C-l>', '<C-\\><C-n><C-w>l')
+vim.keymap.set({ 'n' }, '<C-h>', '<C-w>h')
+vim.keymap.set({ 'n' }, '<C-j>', '<C-w>j')
+vim.keymap.set({ 'n' }, '<C-k>', '<C-w>k')
+vim.keymap.set({ 'n' }, '<C-l>', '<C-w>l')
+
+-- Y to EOL
+vim.keymap.set("n", "Y", "y$", { desc = "Yank to end of line" })
+
+vim.keymap.set("i", "jj", "<ESC>", { desc = "Shortcut for Escape" })
 
 vim.keymap.set("n", "<leader>c", ":nohlsearch<CR>", { desc = "Clear search highlights" })
 
+-- Center screen when jumping
 vim.keymap.set("n", "n", "nzzzv", { desc = "Next search result (centered)" })
 vim.keymap.set("n", "N", "Nzzzv", { desc = "Previous search result (centered)" })
 vim.keymap.set("n", "<C-d>", "<C-d>zz", { desc = "Half page down (centered)" })
 vim.keymap.set("n", "<C-u>", "<C-u>zz", { desc = "Half page up (centered)" })
 
-vim.keymap.set("n", "<leader>w", "<cmd>write<cr>", { desc = "Save file" })
-vim.keymap.set("n", "<leader>q", "<cmd>quit<cr>", { desc = "Quit file" })
+vim.keymap.set("n", "<leader>bn", ":bnext<CR>", { desc = "Next buffer" })
+vim.keymap.set("n", "<leader>bp", ":bprevious<CR>", { desc = "Previous buffer" })
+
+vim.keymap.set("n", "<leader>sv", ":vsplit<CR>", { desc = "Split window vertically" })
+vim.keymap.set("n", "<leader>sh", ":split<CR>", { desc = "Split window horizontally" })
+vim.keymap.set("n", "<C-Up>", ":resize +2<CR>", { desc = "Increase window height" })
+vim.keymap.set("n", "<C-Down>", ":resize -2<CR>", { desc = "Decrease window height" })
+vim.keymap.set("n", "<C-Left>", ":vertical resize -2<CR>", { desc = "Decrease window width" })
+vim.keymap.set("n", "<C-Right>", ":vertical resize +2<CR>", { desc = "Increase window width" })
+
+-- Move lines up/down
+vim.keymap.set("n", "<A-j>", ":m .+1<CR>==", { desc = "Move line down" })
+vim.keymap.set("n", "<A-k>", ":m .-2<CR>==", { desc = "Move line up" })
+vim.keymap.set("v", "<A-j>", ":m '>+1<CR>gv=gv", { desc = "Move selection down" })
+vim.keymap.set("v", "<A-k>", ":m '<-2<CR>gv=gv", { desc = "Move selection up" })
 
 vim.keymap.set("x", "<leader>p", '"_dP', { desc = "Paste without yanking" })
 vim.keymap.set({ "n", "v" }, "<leader>x", '"_d', { desc = "Delete without yanking" })
+
+-- Better indenting in visual mode
+vim.keymap.set("v", "<", "<gv", { desc = "Indent left and reselect" })
+vim.keymap.set("v", ">", ">gv", { desc = "Indent right and reselect" })
 
 vim.keymap.set("n", "<leader>ff", "<cmd>FzfLua files<cr>", { desc = "Find files" })
 vim.keymap.set("n", "<leader>fg", "<cmd>FzfLua live_grep<cr>", { desc = "Grep files" })
 vim.keymap.set("n", "<leader>fb", "<cmd>FzfLua buffers<cr>", { desc = "Find buffers" })
 
-vim.keymap.set("n", "<leader>e", "<cmd>NvimTreeToggle<cr>", { desc = "Toggle NvimTree" })
+vim.keymap.set("n", "<leader>n", "<cmd>NvimTreeToggle<cr>", { desc = "Toggle NvimTree" })
 
 -- AUTOCOMMANDS (EVENT HANDLERS)
 --
@@ -185,6 +223,91 @@ vim.api.nvim_create_user_command('GitBlameLine', function()
   print(vim.system({ 'git', 'blame', '-L', line_number .. ',+1', filename }):wait().stdout)
 end, { desc = 'Print the git blame for the current line' })
 
+-- FLOATING TERMINAL
+--
+vim.api.nvim_create_autocmd("TermClose", {
+	group = augroup,
+	callback = function()
+		if vim.v.event.status == 0 then
+			vim.api.nvim_buf_delete(0, {})
+		end
+	end,
+})
+
+vim.api.nvim_create_autocmd("TermOpen", {
+	group = augroup,
+	callback = function()
+		vim.opt_local.number = false
+		vim.opt_local.relativenumber = false
+		vim.opt_local.signcolumn = "no"
+	end,
+})
+
+local terminal_state = { buf = nil, win = nil, is_open = false }
+
+local function FloatingTerminal()
+	if terminal_state.is_open and terminal_state.win and vim.api.nvim_win_is_valid(terminal_state.win) then
+		vim.api.nvim_win_close(terminal_state.win, false)
+		terminal_state.is_open = false
+		return
+	end
+
+	if not terminal_state.buf or not vim.api.nvim_buf_is_valid(terminal_state.buf) then
+		terminal_state.buf = vim.api.nvim_create_buf(false, true)
+		vim.bo[terminal_state.buf].bufhidden = "hide"
+	end
+
+	local width = math.floor(vim.o.columns * 0.8)
+	local height = math.floor(vim.o.lines * 0.8)
+	local row = math.floor((vim.o.lines - height) / 2)
+	local col = math.floor((vim.o.columns - width) / 2)
+
+	terminal_state.win = vim.api.nvim_open_win(terminal_state.buf, true, {
+		relative = "editor",
+		width = width,
+		height = height,
+		row = row,
+		col = col,
+		style = "minimal",
+		border = "rounded",
+	})
+
+	vim.wo[terminal_state.win].winblend = 0
+	vim.wo[terminal_state.win].winhighlight = "Normal:FloatingTermNormal,FloatBorder:FloatingTermBorder"
+	vim.api.nvim_set_hl(0, "FloatingTermNormal", { bg = "none" })
+	vim.api.nvim_set_hl(0, "FloatingTermBorder", { bg = "none" })
+
+	local has_terminal = vim.bo[terminal_state.buf].buftype == "terminal"
+	if not has_terminal then
+		vim.fn.termopen(os.getenv("SHELL"))
+	end
+
+	terminal_state.is_open = true
+	vim.cmd("startinsert")
+
+	local term_augroup = vim.api.nvim_create_augroup("FloatingTermLeave_" .. terminal_state.win, { clear = true })
+	vim.api.nvim_create_autocmd("BufLeave", {
+		group = term_augroup,
+		buffer = terminal_state.buf,
+		callback = function()
+			if terminal_state.is_open and terminal_state.win and vim.api.nvim_win_is_valid(terminal_state.win) then
+				vim.api.nvim_win_close(terminal_state.win, false)
+				terminal_state.is_open = false
+			end
+		end,
+		once = true,
+	})
+end
+
+vim.keymap.set("n", "<leader>t", FloatingTerminal, { noremap = true, silent = true, desc = "Toggle floating terminal" })
+vim.keymap.set("t", "<Esc>", "<C-\\><C-n>", { noremap = true, silent = true, desc = "Terminal normal mode" })
+vim.keymap.set("t", "<C-q>", function()
+	if terminal_state.is_open and terminal_state.win and vim.api.nvim_win_is_valid(terminal_state.win) then
+		vim.api.nvim_win_close(terminal_state.win, false)
+		terminal_state.is_open = false
+	end
+end, { noremap = true, silent = true, desc = "Close floating terminal" })
+
 -- PLUGINS
 --
 -- See `:h :packadd`, `:h vim.pack`
@@ -209,21 +332,19 @@ vim.pack.add({
   'https://github.com/nvim-treesitter/nvim-treesitter',
   -- A file explorer tree for neovim
   'https://github.com/nvim-tree/nvim-tree.lua',
-  -- Gruvbox colorscheme
-  'https://github.com/ellisonleao/gruvbox.nvim',
   -- Provides Nerd Font icons (glyphs)
   'https://github.com/nvim-tree/nvim-web-devicons',
   -- A neovim statusline plugin
   'https://github.com/nvim-lualine/lualine.nvim',
-  -- Show available keybindings in a popup as you type.
-  'https://github.com/folke/which-key.nvim',
+  -- A highly customizable theme for vim and neovim
+  'https://github.com/EdenEast/nightfox.nvim',
 })
+
+vim.cmd("colorscheme nightfox")
 
 require('fzf-lua').setup { fzf_colors = true }
 require('mini.completion').setup {}
 require('quicker').setup {}
 require('gitsigns').setup {}
 require("nvim-tree").setup {}
-require("gruvbox").setup()
-vim.cmd.colorscheme("gruvbox")
-require('lualine').setup{ options = { theme = 'gruvbox' } }
+require('lualine').setup{}
